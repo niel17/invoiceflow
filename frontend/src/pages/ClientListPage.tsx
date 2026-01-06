@@ -78,16 +78,39 @@ const ClientListPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
+      <Box 
+        display="flex" 
+        flexDirection="column"
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="400px"
+        gap={2}
+      >
+        <CircularProgress size={48} thickness={4} />
+        <Typography variant="body2" color="text.secondary">
+          Loading clients...
+        </Typography>
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Alert severity="error">
-        Failed to load clients. Please try again later.
+      <Alert 
+        severity="error" 
+        sx={{ 
+          borderRadius: 2,
+          '& .MuiAlert-icon': {
+            fontSize: '1.5rem',
+          },
+        }}
+      >
+        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+          Failed to load clients
+        </Typography>
+        <Typography variant="body2">
+          Please try refreshing the page or contact support if the problem persists.
+        </Typography>
       </Alert>
     );
   }
@@ -132,61 +155,96 @@ const ClientListPage: React.FC = () => {
         />
       </Paper>
 
-      <Paper sx={{ border: '1px solid #F3F4F6', overflow: 'hidden' }}>
+      <Paper 
+        sx={{ 
+          border: '1px solid #E5E7EB', 
+          overflow: 'hidden',
+          borderRadius: 2,
+        }}
+      >
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: '#F9FAFB' }}>
-              <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.875rem' }}>Name</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.875rem' }}>Email</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.875rem' }}>Phone</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.875rem' }}>City</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.875rem' }}>State</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.875rem' }}>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredClients.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} align="center">
-                  {searchQuery ? 'No clients found matching your search' : 'No clients yet'}
-                </TableCell>
+                <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Phone</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>City</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>State</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Actions</TableCell>
               </TableRow>
-            ) : (
-              filteredClients.map((client) => (
-                <TableRow 
-                  key={client.id} 
-                  hover
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: '#F9FAFB',
-                    },
-                    '& td': {
-                      borderColor: '#F3F4F6',
-                    },
-                  }}
-                >
+            </TableHead>
+            <TableBody>
+              {filteredClients.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center" sx={{ py: 6 }}>
+                    <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
+                      No clients found
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {searchQuery 
+                        ? 'Try adjusting your search' 
+                        : 'Create your first client to get started'}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredClients.map((client) => (
+                  <TableRow 
+                    key={client.id} 
+                    hover
+                    sx={{
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s',
+                      '&:hover': {
+                        backgroundColor: '#F9FAFB',
+                      },
+                    }}
+                    onClick={() => navigate(`/clients/${client.id}`)}
+                  >
                   <TableCell>{client.name}</TableCell>
                   <TableCell>{client.email || '-'}</TableCell>
                   <TableCell>{client.phone || '-'}</TableCell>
                   <TableCell>{client.city || '-'}</TableCell>
                   <TableCell>{client.state || '-'}</TableCell>
                   <TableCell>
-                    <IconButton
-                      size="small"
-                      onClick={() => navigate(`/clients/${client.id}`)}
-                      aria-label={`View client ${client.name}`}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleDeleteClick(client)}
-                      aria-label={`Delete client ${client.name}`}
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <Box sx={{ display: 'flex', gap: 0.5 }}>
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/clients/${client.id}`);
+                        }}
+                        aria-label={`View client ${client.name}`}
+                        sx={{
+                          color: '#6B7280',
+                          '&:hover': {
+                            color: '#000000',
+                            backgroundColor: '#F3F4F6',
+                          },
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick(client);
+                        }}
+                        aria-label={`Delete client ${client.name}`}
+                        sx={{
+                          color: '#DC2626',
+                          '&:hover': {
+                            backgroundColor: '#FEE2E2',
+                          },
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))

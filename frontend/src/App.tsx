@@ -6,6 +6,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import InvoiceListPage from './pages/InvoiceListPage';
 import InvoiceBuilderPage from './pages/InvoiceBuilderPage';
+import InvoiceDetailPage from './pages/InvoiceDetailPage';
 import ClientListPage from './pages/ClientListPage';
 import ClientDetailPage from './pages/ClientDetailPage';
 import Layout from './components/Layout';
@@ -62,7 +63,8 @@ const App: React.FC = () => {
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="invoices" element={<InvoiceListPage />} />
         <Route path="invoices/new" element={<InvoiceBuilderPage />} />
-        <Route path="invoices/:id" element={<InvoiceBuilderPage />} />
+        <Route path="invoices/:id" element={<InvoiceDetailPage />} />
+        <Route path="invoices/:id/edit" element={<InvoiceBuilderPage />} />
         <Route path="clients" element={<ClientListPage />} />
         <Route path="clients/new" element={<ClientDetailPage />} />
         <Route path="clients/:id" element={<ClientDetailPage />} />

@@ -14,6 +14,10 @@ import {
   ListItemText,
   useTheme,
   useMediaQuery,
+  IconButton,
+  Avatar,
+  Tooltip,
+  Badge,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -57,53 +61,99 @@ const Layout: React.FC = () => {
   };
 
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar sx={{ minHeight: '72px !important', borderBottom: '1px solid #F3F4F6' }}>
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700, fontSize: '1.25rem' }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#FFFFFF' }}>
+      <Toolbar 
+        sx={{ 
+          minHeight: '80px !important', 
+          borderBottom: '1px solid #E5E7EB',
+          px: 3,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Typography 
+          variant="h6" 
+          noWrap 
+          component="div" 
+          sx={{ 
+            fontWeight: 700, 
+            fontSize: '1.5rem',
+            letterSpacing: '-0.02em',
+            background: 'linear-gradient(135deg, #000000 0%, #374151 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
           InvoiceFlow
         </Typography>
       </Toolbar>
-      <Box sx={{ flex: 1, py: 2 }}>
+      <Box sx={{ flex: 1, py: 2, overflowY: 'auto' }}>
         <List sx={{ px: 2 }}>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                selected={location.pathname === item.path}
-                onClick={() => handleNavigation(item.path)}
-                aria-label={`Navigate to ${item.text}`}
-                sx={{
-                  borderRadius: 2,
-                  py: 1.5,
-                  px: 2,
-                  '&.Mui-selected': {
-                    backgroundColor: '#F9FAFB',
-                    color: '#000000',
-                    '&:hover': {
-                      backgroundColor: '#F3F4F6',
-                    },
-                    '& .MuiListItemIcon-root': {
-                      color: '#000000',
-                    },
-                  },
-                  '&:hover': {
-                    backgroundColor: '#F9FAFB',
-                  },
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 40, color: location.pathname === item.path ? '#000000' : '#6B7280' }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText 
-                  primary={item.text} 
-                  primaryTypographyProps={{
-                    fontSize: '0.9375rem',
-                    fontWeight: location.pathname === item.path ? 600 : 500,
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-          <ListItem disablePadding sx={{ mt: 1 }}>
+          {menuItems.map((item) => {
+            const isSelected = location.pathname === item.path || 
+              (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
+            return (
+              <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+                <Tooltip title={item.text} placement="right" arrow>
+                  <ListItemButton
+                    selected={isSelected}
+                    onClick={() => handleNavigation(item.path)}
+                    aria-label={`Navigate to ${item.text}`}
+                    sx={{
+                      borderRadius: 2,
+                      py: 1.5,
+                      px: 2,
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                      '&.Mui-selected': {
+                        backgroundColor: '#F3F4F6',
+                        color: '#000000',
+                        '&:hover': {
+                          backgroundColor: '#E5E7EB',
+                        },
+                        '& .MuiListItemIcon-root': {
+                          color: '#000000',
+                        },
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          left: 0,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          width: 3,
+                          height: 24,
+                          backgroundColor: '#000000',
+                          borderRadius: '0 2px 2px 0',
+                        },
+                      },
+                      '&:hover': {
+                        backgroundColor: '#F9FAFB',
+                        transform: 'translateX(4px)',
+                      },
+                    }}
+                  >
+                    <ListItemIcon 
+                      sx={{ 
+                        minWidth: 44, 
+                        color: isSelected ? '#000000' : '#6B7280',
+                        transition: 'color 0.2s',
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={item.text} 
+                      primaryTypographyProps={{
+                        fontSize: '0.9375rem',
+                        fontWeight: isSelected ? 600 : 500,
+                        letterSpacing: '-0.01em',
+                      }}
+                    />
+                  </ListItemButton>
+                </Tooltip>
+              </ListItem>
+            );
+          })}
+          <Box sx={{ mt: 2, px: 2 }}>
             <ListItemButton
               onClick={() => handleNavigation('/invoices/new')}
               aria-label="Create new invoice"
@@ -113,8 +163,15 @@ const Layout: React.FC = () => {
                 px: 2,
                 backgroundColor: '#000000',
                 color: '#ffffff',
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
                   backgroundColor: '#1F2937',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.15)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
                 },
                 '& .MuiListItemIcon-root': {
                   color: '#ffffff',
@@ -132,10 +189,10 @@ const Layout: React.FC = () => {
                 }}
               />
             </ListItemButton>
-          </ListItem>
+          </Box>
         </List>
       </Box>
-      <Box sx={{ borderTop: '1px solid #F3F4F6', p: 2 }}>
+      <Box sx={{ borderTop: '1px solid #E5E7EB', p: 2 }}>
         <ListItem disablePadding>
           <ListItemButton 
             onClick={handleLogout} 
@@ -144,12 +201,17 @@ const Layout: React.FC = () => {
               borderRadius: 2,
               py: 1.5,
               px: 2,
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               '&:hover': {
-                backgroundColor: '#F9FAFB',
+                backgroundColor: '#FEF2F2',
+                color: '#DC2626',
+                '& .MuiListItemIcon-root': {
+                  color: '#DC2626',
+                },
               },
             }}
           >
-            <ListItemIcon sx={{ color: '#6B7280' }}>
+            <ListItemIcon sx={{ color: '#6B7280', transition: 'color 0.2s' }}>
               <LogoutIcon />
             </ListItemIcon>
             <ListItemText 
@@ -157,7 +219,7 @@ const Layout: React.FC = () => {
               primaryTypographyProps={{
                 fontSize: '0.9375rem',
                 fontWeight: 500,
-                color: '#6B7280',
+                color: 'inherit',
               }}
             />
           </ListItemButton>
@@ -173,12 +235,51 @@ const Layout: React.FC = () => {
         sx={{
           width: { md: `calc(100% - ${drawerWidth}px)` },
           ml: { md: `${drawerWidth}px` },
+          backgroundColor: '#FFFFFF',
+          color: '#111827',
+          boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
+          borderBottom: '1px solid #E5E7EB',
         }}
       >
-        <Toolbar sx={{ minHeight: '72px !important', px: { xs: 2, sm: 3 } }}>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600, fontSize: '1rem' }}>
-            {user?.name || 'InvoiceFlow'}
+        <Toolbar sx={{ minHeight: '72px !important', px: { xs: 2, sm: 3 }, justifyContent: 'space-between' }}>
+          <Typography 
+            variant="h6" 
+            noWrap 
+            component="div" 
+            sx={{ 
+              fontWeight: 600, 
+              fontSize: '1.125rem',
+              color: '#111827',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {menuItems.find(item => location.pathname.startsWith(item.path))?.text || 'Dashboard'}
           </Typography>
+          {user && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  color: '#6B7280',
+                  fontSize: '0.875rem',
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                {user.name}
+              </Typography>
+              <Avatar 
+                sx={{ 
+                  width: 36, 
+                  height: 36,
+                  backgroundColor: '#000000',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                }}
+              >
+                {user.name.charAt(0).toUpperCase()}
+              </Avatar>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <Box
@@ -215,12 +316,16 @@ const Layout: React.FC = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: { xs: 2, sm: 3, md: 4 },
           width: { md: `calc(100% - ${drawerWidth}px)` },
+          backgroundColor: '#F9FAFB',
+          minHeight: '100vh',
         }}
       >
         <Toolbar />
-        <Outlet />
+        <Box sx={{ maxWidth: '1400px', mx: 'auto' }}>
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

@@ -30,16 +30,39 @@ const DashboardPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
+      <Box 
+        display="flex" 
+        flexDirection="column"
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="400px"
+        gap={2}
+      >
+        <CircularProgress size={48} thickness={4} />
+        <Typography variant="body2" color="text.secondary">
+          Loading dashboard data...
+        </Typography>
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Alert severity="error">
-        Failed to load dashboard data. Please try again later.
+      <Alert 
+        severity="error" 
+        sx={{ 
+          borderRadius: 2,
+          '& .MuiAlert-icon': {
+            fontSize: '1.5rem',
+          },
+        }}
+      >
+        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+          Failed to load dashboard data
+        </Typography>
+        <Typography variant="body2">
+          Please try refreshing the page or contact support if the problem persists.
+        </Typography>
       </Alert>
     );
   }
@@ -95,10 +118,29 @@ const DashboardPage: React.FC = () => {
   ];
 
   return (
-    <Box sx={{ maxWidth: '1400px', mx: 'auto' }}>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, fontWeight: 700 }}>
-        Dashboard
-      </Typography>
+    <Box>
+      <Box sx={{ mb: 4 }}>
+        <Typography 
+          variant="h4" 
+          component="h1" 
+          sx={{ 
+            fontWeight: 700, 
+            fontSize: { xs: '1.75rem', sm: '2rem' },
+            letterSpacing: '-0.02em',
+            mb: 1,
+            color: '#111827',
+          }}
+        >
+          Dashboard
+        </Typography>
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          sx={{ fontSize: '0.9375rem' }}
+        >
+          Overview of your invoice management
+        </Typography>
+      </Box>
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {statCards.map((card) => (
           <Grid item xs={12} sm={6} md={3} key={card.title}>
@@ -158,16 +200,57 @@ const DashboardPage: React.FC = () => {
           </Grid>
         ))}
         <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 4, height: '400px', border: '1px solid #F3F4F6' }}>
-            <Typography variant="h6" gutterBottom sx={{ mb: 3, fontWeight: 600, fontSize: '1.125rem' }}>
+          <Paper 
+            sx={{ 
+              p: { xs: 3, sm: 4 }, 
+              height: { xs: '350px', sm: '400px' }, 
+              border: '1px solid #E5E7EB',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': {
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.06)',
+              },
+            }}
+          >
+            <Typography 
+              variant="h6" 
+              gutterBottom 
+              sx={{ 
+                mb: 3, 
+                fontWeight: 600, 
+                fontSize: '1.125rem',
+                letterSpacing: '-0.01em',
+                color: '#111827',
+              }}
+            >
               Revenue by Month
             </Typography>
             <RevenueChart invoices={invoicesData} />
           </Paper>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 4, height: '400px', border: '1px solid #F3F4F6', overflow: 'hidden' }}>
-            <Typography variant="h6" gutterBottom sx={{ mb: 3, fontWeight: 600, fontSize: '1.125rem' }}>
+          <Paper 
+            sx={{ 
+              p: { xs: 3, sm: 4 }, 
+              height: { xs: '350px', sm: '400px' }, 
+              border: '1px solid #E5E7EB',
+              overflow: 'hidden',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': {
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.06)',
+              },
+            }}
+          >
+            <Typography 
+              variant="h6" 
+              gutterBottom 
+              sx={{ 
+                mb: 3, 
+                fontWeight: 600, 
+                fontSize: '1.125rem',
+                letterSpacing: '-0.01em',
+                color: '#111827',
+              }}
+            >
               Payment Status
             </Typography>
             <Box sx={{ height: 'calc(100% - 60px)' }}>
@@ -176,8 +259,27 @@ const DashboardPage: React.FC = () => {
           </Paper>
         </Grid>
         <Grid item xs={12}>
-          <Paper sx={{ p: 4, border: '1px solid #F3F4F6' }}>
-            <Typography variant="h6" gutterBottom sx={{ mb: 3, fontWeight: 600, fontSize: '1.125rem' }}>
+          <Paper 
+            sx={{ 
+              p: { xs: 3, sm: 4 }, 
+              border: '1px solid #E5E7EB',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': {
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.06)',
+              },
+            }}
+          >
+            <Typography 
+              variant="h6" 
+              gutterBottom 
+              sx={{ 
+                mb: 3, 
+                fontWeight: 600, 
+                fontSize: '1.125rem',
+                letterSpacing: '-0.01em',
+                color: '#111827',
+              }}
+            >
               Recent Activity
             </Typography>
             <RecentActivity invoices={invoicesData} />

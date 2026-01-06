@@ -76,6 +76,7 @@ const InvoiceBuilderPage: React.FC = () => {
     handleSubmit,
     watch,
     setValue,
+    trigger,
     formState: { errors },
   } = useForm<InvoiceFormData>({
     resolver: zodResolver(invoiceSchema),
@@ -140,13 +141,35 @@ const InvoiceBuilderPage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] });
       queryClient.invalidateQueries({ queryKey: ['invoice', id] });
     },
+    onError: (error: any) => {
+      console.error('Update invoice error:', error);
+    },
   });
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (activeStep === steps.length - 1) {
+      // On the last step, validate and submit
       handleSubmit(onSubmit)();
     } else {
-      setActiveStep((prevStep) => prevStep + 1);
+      // Validate current step before moving to next
+      const fieldsToValidate = getFieldsForStep(activeStep);
+      const isValid = await trigger(fieldsToValidate);
+      if (isValid) {
+        setActiveStep((prevStep) => prevStep + 1);
+      }
+    }
+  };
+
+  const getFieldsForStep = (step: number): (keyof InvoiceFormData)[] => {
+    switch (step) {
+      case 0:
+        return ['client_id', 'issue_date', 'due_date', 'payment_terms'];
+      case 1:
+        return ['line_items'];
+      case 2:
+        return ['tax_rate'];
+      default:
+        return [];
     }
   };
 
@@ -175,22 +198,77 @@ const InvoiceBuilderPage: React.FC = () => {
 
   if (loadingInvoice) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
+      <Box 
+        display="flex" 
+        flexDirection="column"
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="400px"
+        gap={2}
+      >
+        <CircularProgress size={48} thickness={4} />
+        <Typography variant="body2" color="text.secondary">
+          Loading invoice...
+        </Typography>
       </Box>
     );
   }
 
   return (
     <Box sx={{ maxWidth: '1200px', mx: 'auto' }}>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, fontWeight: 700 }}>
-        {id ? 'Edit Invoice' : 'Create Invoice'}
-      </Typography>
-      <Paper sx={{ p: 4, border: '1px solid #F3F4F6' }}>
-        <Stepper activeStep={activeStep}>
-          {steps.map((label) => (
+      <Box sx={{ mb: 4 }}>
+        <Typography 
+          variant="h4" 
+          component="h1" 
+          sx={{ 
+            fontWeight: 700, 
+            fontSize: { xs: '1.75rem', sm: '2rem' },
+            letterSpacing: '-0.02em',
+            mb: 1,
+            color: '#111827',
+          }}
+        >
+          {id ? 'Edit Invoice' : 'Create Invoice'}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9375rem' }}>
+          {id ? 'Update invoice details and line items' : 'Fill in the details to create a new invoice'}
+        </Typography>
+      </Box>
+      <Paper 
+        sx={{ 
+          p: { xs: 3, sm: 4 }, 
+          border: '1px solid #E5E7EB',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+      >
+        <Stepper 
+          activeStep={activeStep}
+          sx={{ mb: 4 }}
+        >
+          {steps.map((label, index) => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel
+                StepIconProps={{
+                  sx: {
+                    '&.Mui-completed': {
+                      color: '#10B981',
+                    },
+                    '&.Mui-active': {
+                      color: '#000000',
+                    },
+                  },
+                }}
+              >
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    fontWeight: activeStep === index ? 600 : 400,
+                    fontSize: '0.875rem',
+                  }}
+                >
+                  {label}
+                </Typography>
+              </StepLabel>
             </Step>
           ))}
         </Stepper>
@@ -261,36 +339,92 @@ const InvoiceBuilderPage: React.FC = () => {
 
           {activeStep === 1 && (
             <Box>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6">Line Items</Typography>
+              <Box 
+                display="flex" 
+                justifyContent="space-between" 
+                alignItems="center" 
+                mb={3}
+                flexWrap="wrap"
+                gap={2}
+              >
+                <Typography 
+                  variant="h6"
+                  sx={{ 
+                    fontWeight: 600,
+                    fontSize: '1.125rem',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  Line Items
+                </Typography>
                 <Button
                   startIcon={<AddIcon />}
                   onClick={() => append({ description: '', quantity: 1, rate: 0 })}
                   variant="outlined"
+                  sx={{
+                    borderColor: '#E5E7EB',
+                    '&:hover': {
+                      borderColor: '#000000',
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                    },
+                  }}
                 >
                   Add Item
                 </Button>
               </Box>
-              <TableContainer>
+              <TableContainer 
+                component={Paper}
+                variant="outlined"
+                sx={{ 
+                  border: '1px solid #E5E7EB',
+                  borderRadius: 2,
+                  overflow: 'hidden',
+                }}
+              >
                 <Table>
                   <TableHead>
-                    <TableRow>
-                      <TableCell>Description</TableCell>
-                      <TableCell>Quantity</TableCell>
-                      <TableCell>Rate</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Actions</TableCell>
+                    <TableRow sx={{ backgroundColor: '#F9FAFB' }}>
+                      <TableCell sx={{ fontWeight: 600, fontSize: '0.8125rem', color: '#374151' }}>
+                        Description
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 600, fontSize: '0.8125rem', color: '#374151' }}>
+                        Quantity
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 600, fontSize: '0.8125rem', color: '#374151' }}>
+                        Rate
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 600, fontSize: '0.8125rem', color: '#374151' }}>
+                        Amount
+                      </TableCell>
+                      <TableCell align="center" sx={{ fontWeight: 600, fontSize: '0.8125rem', color: '#374151' }}>
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {fields.map((field, index) => (
-                      <TableRow key={field.id}>
+                      <TableRow 
+                        key={field.id}
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: '#F9FAFB',
+                          },
+                          transition: 'background-color 0.2s',
+                        }}
+                      >
                         <TableCell>
                           <TextField
                             fullWidth
                             size="small"
+                            placeholder="Item description"
                             {...register(`line_items.${index}.description`)}
                             error={!!errors.line_items?.[index]?.description}
+                            helperText={errors.line_items?.[index]?.description?.message}
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                backgroundColor: '#FFFFFF',
+                              },
+                            }}
                           />
                         </TableCell>
                         <TableCell>
@@ -298,8 +432,16 @@ const InvoiceBuilderPage: React.FC = () => {
                             fullWidth
                             size="small"
                             type="number"
+                            placeholder="0"
                             {...register(`line_items.${index}.quantity`, { valueAsNumber: true })}
                             error={!!errors.line_items?.[index]?.quantity}
+                            helperText={errors.line_items?.[index]?.quantity?.message}
+                            inputProps={{ min: 0, step: 0.01 }}
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                backgroundColor: '#FFFFFF',
+                              },
+                            }}
                           />
                         </TableCell>
                         <TableCell>
@@ -307,23 +449,48 @@ const InvoiceBuilderPage: React.FC = () => {
                             fullWidth
                             size="small"
                             type="number"
+                            placeholder="0.00"
                             {...register(`line_items.${index}.rate`, { valueAsNumber: true })}
                             error={!!errors.line_items?.[index]?.rate}
+                            helperText={errors.line_items?.[index]?.rate?.message}
+                            inputProps={{ min: 0, step: 0.01 }}
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                backgroundColor: '#FFFFFF',
+                              },
+                            }}
                           />
                         </TableCell>
-                        <TableCell>
-                          ${(
-                            (watchedValues.line_items?.[index]?.quantity || 0) *
-                            (watchedValues.line_items?.[index]?.rate || 0)
-                          ).toFixed(2)}
+                        <TableCell align="right">
+                          <Typography 
+                            variant="body2" 
+                            sx={{ 
+                              fontWeight: 600,
+                              color: '#111827',
+                              fontSize: '0.9375rem',
+                            }}
+                          >
+                            ${(
+                              (watchedValues.line_items?.[index]?.quantity || 0) *
+                              (watchedValues.line_items?.[index]?.rate || 0)
+                            ).toFixed(2)}
+                          </Typography>
                         </TableCell>
-                        <TableCell>
+                        <TableCell align="center">
                           <IconButton
                             onClick={() => remove(index)}
                             disabled={fields.length === 1}
                             aria-label="Remove line item"
+                            size="small"
+                            sx={{
+                              color: fields.length === 1 ? '#D1D5DB' : '#DC2626',
+                              '&:hover': {
+                                backgroundColor: '#FEE2E2',
+                              },
+                              transition: 'all 0.2s',
+                            }}
                           >
-                            <DeleteIcon />
+                            <DeleteIcon fontSize="small" />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -332,8 +499,27 @@ const InvoiceBuilderPage: React.FC = () => {
                 </Table>
               </TableContainer>
               {errors.line_items && (
-                <Alert severity="error" sx={{ mt: 2 }}>
-                  {errors.line_items.message || 'Line items are required'}
+                <Alert 
+                  severity="error" 
+                  sx={{ 
+                    mt: 2,
+                    borderRadius: 2,
+                  }}
+                >
+                  {typeof errors.line_items === 'object' && 'message' in errors.line_items
+                    ? errors.line_items.message
+                    : 'At least one line item is required'}
+                </Alert>
+              )}
+              {fields.length === 0 && (
+                <Alert 
+                  severity="warning" 
+                  sx={{ 
+                    mt: 2,
+                    borderRadius: 2,
+                  }}
+                >
+                  Please add at least one line item to continue.
                 </Alert>
               )}
             </Box>
@@ -505,25 +691,83 @@ const InvoiceBuilderPage: React.FC = () => {
           )}
 
           {(createMutation.isError || updateMutation.isError) && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {createMutation.error?.message || updateMutation.error?.message || 'An error occurred'}
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mt: 3,
+                borderRadius: 2,
+                '& .MuiAlert-icon': {
+                  fontSize: '1.5rem',
+                },
+              }}
+            >
+              <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+                Error saving invoice
+              </Typography>
+              <Typography variant="body2">
+                {(createMutation.error as any)?.response?.data?.error || 
+                 (updateMutation.error as any)?.response?.data?.error ||
+                 (createMutation.error as any)?.message || 
+                 (updateMutation.error as any)?.message || 
+                 'An error occurred. Please try again.'}
+              </Typography>
             </Alert>
           )}
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-            <Button disabled={activeStep === 0} onClick={handleBack}>
+          {createMutation.isSuccess && (
+            <Alert 
+              severity="success" 
+              sx={{ 
+                mt: 3,
+                borderRadius: 2,
+              }}
+            >
+              Invoice {id ? 'updated' : 'created'} successfully!
+            </Alert>
+          )}
+
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              mt: 4,
+              pt: 3,
+              borderTop: '1px solid #E5E7EB',
+              gap: 2,
+            }}
+          >
+            <Button 
+              disabled={activeStep === 0 || createMutation.isPending || updateMutation.isPending} 
+              onClick={handleBack}
+              variant="outlined"
+              sx={{
+                borderColor: '#E5E7EB',
+                minWidth: 100,
+              }}
+            >
               Back
             </Button>
             <Button
               variant="contained"
               onClick={handleNext}
               disabled={createMutation.isPending || updateMutation.isPending}
+              type={activeStep === steps.length - 1 ? 'button' : 'button'}
+              sx={{
+                minWidth: 140,
+              }}
             >
-              {activeStep === steps.length - 1
-                ? id
-                  ? 'Update Invoice'
-                  : 'Create Invoice'
-                : 'Next'}
+              {createMutation.isPending || updateMutation.isPending ? (
+                <>
+                  <CircularProgress size={16} sx={{ mr: 1, color: '#FFFFFF' }} />
+                  {id ? 'Updating...' : 'Creating...'}
+                </>
+              ) : (
+                activeStep === steps.length - 1
+                  ? id
+                    ? 'Update Invoice'
+                    : 'Create Invoice'
+                  : 'Next'
+              )}
             </Button>
           </Box>
         </Box>

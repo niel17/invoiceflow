@@ -117,16 +117,39 @@ const InvoiceListPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
+      <Box 
+        display="flex" 
+        flexDirection="column"
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="400px"
+        gap={2}
+      >
+        <CircularProgress size={48} thickness={4} />
+        <Typography variant="body2" color="text.secondary">
+          Loading invoices...
+        </Typography>
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Alert severity="error">
-        Failed to load invoices. Please try again later.
+      <Alert 
+        severity="error" 
+        sx={{ 
+          borderRadius: 2,
+          '& .MuiAlert-icon': {
+            fontSize: '1.5rem',
+          },
+        }}
+      >
+        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+          Failed to load invoices
+        </Typography>
+        <Typography variant="body2">
+          Please try refreshing the page or contact support if the problem persists.
+        </Typography>
       </Alert>
     );
   }
@@ -187,7 +210,13 @@ const InvoiceListPage: React.FC = () => {
         </Box>
       </Paper>
 
-      <Paper sx={{ border: '1px solid #F3F4F6', overflow: 'hidden' }}>
+      <Paper 
+        sx={{ 
+          border: '1px solid #E5E7EB', 
+          overflow: 'hidden',
+          borderRadius: 2,
+        }}
+      >
         <TableContainer>
           <Table>
             <TableHead>
@@ -255,27 +284,34 @@ const InvoiceListPage: React.FC = () => {
               <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.875rem' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {filteredInvoices.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} align="center" sx={{ py: 6, color: 'text.secondary' }}>
-                  No invoices found
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredInvoices.map((invoice) => (
-                <TableRow 
-                  key={invoice.id} 
-                  hover
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: '#F9FAFB',
-                    },
-                    '& td': {
-                      borderColor: '#F3F4F6',
-                    },
-                  }}
-                >
+            <TableBody>
+              {filteredInvoices.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
+                    <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
+                      No invoices found
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {searchQuery || statusFilter !== 'all' 
+                        ? 'Try adjusting your filters' 
+                        : 'Create your first invoice to get started'}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredInvoices.map((invoice) => (
+                  <TableRow 
+                    key={invoice.id} 
+                    hover
+                    sx={{
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s',
+                      '&:hover': {
+                        backgroundColor: '#F9FAFB',
+                      },
+                    }}
+                    onClick={() => navigate(`/invoices/${invoice.id}`)}
+                  >
                   <TableCell>{invoice.invoice_number}</TableCell>
                   <TableCell>{invoice.client?.name || 'Unknown'}</TableCell>
                   <TableCell>{format(parseISO(invoice.issue_date), 'MMM d, yyyy')}</TableCell>
@@ -292,19 +328,28 @@ const InvoiceListPage: React.FC = () => {
                     <Box display="flex" gap={0.5}>
                       <IconButton
                         size="small"
-                        onClick={() => navigate(`/invoices/${invoice.id}`)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/invoices/${invoice.id}`);
+                        }}
                         aria-label={`View invoice ${invoice.invoice_number}`}
                         sx={{ 
+                          color: '#6B7280',
                           '&:hover': { 
+                            color: '#000000',
                             backgroundColor: '#F3F4F6',
                           },
+                          transition: 'all 0.2s',
                         }}
                       >
                         <VisibilityIcon fontSize="small" />
                       </IconButton>
                       <IconButton
                         size="small"
-                        onClick={() => navigate(`/invoices/${invoice.id}`)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/invoices/${invoice.id}/edit`);
+                        }}
                         aria-label={`Edit invoice ${invoice.invoice_number}`}
                         sx={{ 
                           '&:hover': { 
