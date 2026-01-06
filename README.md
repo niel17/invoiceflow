@@ -280,16 +280,33 @@ Status can be updated:
 
 ## Deployment
 
-### Backend
-The backend can be deployed to:
-- Heroku
-- Railway
-- AWS EC2
-- DigitalOcean
+### Quick Deploy to Vercel (Frontend)
 
-### Frontend
-The frontend can be deployed to:
-- Vercel (recommended)
-- Netlify
-- AWS S3 + CloudFront
+1. **Go to [vercel.com](https://vercel.com)** and sign in with GitHub
+2. **Click "Add New Project"**
+3. **Import your repository**: `suhasramanand/invoiceflow`
+4. **Configure the project**:
+   - **Root Directory**: `frontend`
+   - **Framework Preset**: Vite (auto-detected)
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+   - **Install Command**: `npm install`
+5. **Add Environment Variable**:
+   - Key: `VITE_API_URL`
+   - Value: `https://your-backend-url.com/api` (update after backend deployment)
+6. **Click "Deploy"**
+
+Your frontend will be live at `https://your-project.vercel.app`
+
+### Backend Deployment
+
+The backend needs to be deployed separately. Recommended platforms:
+
+- **Railway** (Recommended - Easy PostgreSQL setup)
+- **Render** (Free tier available)
+- **Heroku** (Classic platform)
+- **AWS EC2** (More control)
+- **DigitalOcean** (App Platform)
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions for both frontend and backend.
 
