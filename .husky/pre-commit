@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit hooks..."
+
+# Run linters
+cd backend && npm run lint && cd ..
+cd frontend && npm run lint && cd ..
+
+# Run formatters
+npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md}"
+
+echo "Pre-commit checks passed!"
+
