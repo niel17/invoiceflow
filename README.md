@@ -13,10 +13,6 @@
 
 InvoiceFlow is a comprehensive invoice management system designed for small businesses. It provides a clean, modern interface for creating invoices, managing clients, tracking payments, and generating professional PDFs. Built with a focus on accessibility, test-driven development, and modern best practices.
 
-![InvoiceFlow - Invoice Detail View](screenshot.png)
-
-*Invoice detail page showing invoice information, line items, and summary*
-
 ## Features
 
 ### Core Functionality
