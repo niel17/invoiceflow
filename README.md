@@ -1,308 +1,113 @@
 # InvoiceFlow
 
-> A modern, minimalist invoice management platform for small businesses. Built with React, TypeScript, Node.js, and PostgreSQL.
+A modern invoice management platform I built to help small businesses handle their invoicing workflow. Think of it as a simpler, cleaner alternative to QuickBooks - focused on what actually matters for small teams.
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Material-UI](https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)](https://mui.com/)
-[![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)](https://jestjs.io/)
+## What I Built
 
-## Overview
+This started as a project to showcase my full-stack skills, but I ended up building something I'd actually want to use. It's a complete invoice management system with a clean interface, solid architecture, and attention to detail.
 
-InvoiceFlow is a comprehensive invoice management system designed for small businesses. It provides a clean, modern interface for creating invoices, managing clients, tracking payments, and generating professional PDFs. Built with a focus on accessibility, test-driven development, and modern best practices.
+### Core Features
 
-## Features
+**Invoice Builder** - A step-by-step wizard that makes creating invoices actually pleasant. You pick a client, add line items, set payment terms, and see everything calculated in real-time. No surprises when you hit "create."
 
-### Core Functionality
+**Dashboard** - Quick overview of what matters: how much you're owed, what got paid this month, what's overdue. Charts show revenue trends and payment status breakdowns so you can see the big picture at a glance.
 
-- **Multi-Step Invoice Builder** - Intuitive wizard for creating professional invoices
-  - Client selection with autocomplete
-  - Dynamic line item management
-  - Real-time calculations (subtotal, tax, discounts, total)
-  - Payment terms configuration (Net 15, 30, 45, 60)
-  - Invoice preview before finalizing
+**Client Management** - Keep track of all your clients in one place. See their invoice history, outstanding balances, and create new invoices right from their profile. Simple CRUD, but done right.
 
-- **Dashboard & Analytics**
-  - Revenue trends by month (last 6 months)
-  - Payment status breakdown (pie chart)
-  - Key metrics: Total Outstanding, Paid This Month, Total Invoices, Overdue
-  - Recent activity feed
+**Invoice List** - All your invoices in a sortable, filterable table. Filter by status, date range, or search by invoice number. Change statuses as invoices move through their lifecycle (draft → sent → viewed → paid).
 
-- **Client Management**
-  - Full CRUD operations
-  - Client contact information
-  - Outstanding balance tracking
-  - Invoice history per client
-  - Quick invoice creation from client profile
+**PDF Generation** - Download professional-looking invoice PDFs. Clean formatting, all the details, ready to send to clients.
 
-- **Invoice Management**
-  - Sortable, filterable data table
-  - Status filtering (Draft, Sent, Viewed, Paid, Overdue)
-  - Date range filtering
-  - Search by invoice number or client name
-  - Status workflow management
+### The Technical Stuff
 
-- **PDF Generation**
-  - Professional invoice PDFs
-  - Download functionality
-  - Formatted with company branding
-  - Includes all invoice details and line items
+I built this with a modern stack that I actually enjoy working with:
 
-### Advanced Features
+**Frontend:**
+- React 18 with TypeScript for type safety
+- Material-UI for components (but heavily customized)
+- React Hook Form + Zod for form validation
+- TanStack Query for data fetching and caching
+- Recharts for the dashboard visualizations
+- jsPDF for generating invoice PDFs
 
-- **Authentication** - JWT-based secure authentication
-- **Accessibility** - WCAG 2.1 AA compliant
-- **Responsive Design** - Mobile-first approach
-- **Test-Driven Development** - Comprehensive test coverage
-- **Real-time Updates** - Status changes without page refresh
-- **Automatic Overdue Detection** - Invoices past due date auto-marked
+**Backend:**
+- Node.js + Express with TypeScript
+- PostgreSQL for the database
+- JWT for authentication
+- Proper validation and error handling
 
-## Tech Stack
+**Testing & Quality:**
+- Jest + React Testing Library for tests
+- ESLint + Prettier for code quality
+- Test-driven development approach
 
-### Frontend
-- **React 18** - UI library
-- **TypeScript** - Type safety
-- **Material-UI v5** - Component library
-- **React Hook Form** - Form management
-- **Zod** - Schema validation
-- **TanStack Query** - Data fetching and caching
-- **React Router v6** - Navigation
-- **Recharts** - Data visualization
-- **jsPDF** - PDF generation
-- **Vite** - Build tool
-- **Jest + React Testing Library** - Testing
+**Accessibility:**
+- WCAG 2.1 AA compliant
+- Keyboard navigation throughout
+- Screen reader support
+- Proper ARIA labels
 
-### Backend
-- **Node.js** - Runtime
-- **Express.js** - Web framework
-- **TypeScript** - Type safety
-- **PostgreSQL** - Database
-- **JWT** - Authentication
-- **express-validator** - Input validation
-- **bcryptjs** - Password hashing
-- **Jest** - Testing
+## Why I Built It This Way
 
-### DevOps
-- **GitHub Actions** - CI/CD
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-- **Husky** - Git hooks
+I wanted to practice building something end-to-end, not just a tutorial project. So I focused on:
+
+- **Clean code** - TypeScript everywhere, proper error handling, organized structure
+- **User experience** - Modern, minimalist design that doesn't get in the way
+- **Accessibility** - Everyone should be able to use this, so I made sure it works with screen readers and keyboards
+- **Testing** - Wrote tests as I built features, not as an afterthought
+- **Real-world features** - Things like automatic overdue detection, status workflows, and proper calculations
 
 ## Getting Started
 
-### Prerequisites
+If you want to run this locally:
 
-- Node.js 18+ 
-- PostgreSQL 14+
-- npm or yarn
+```bash
+# Backend
+cd backend
+npm install
+# Set up your .env file with database credentials
+npm run db:migrate
+npm run db:seed
+npm run dev
 
-### Installation
+# Frontend (in another terminal)
+cd frontend
+npm install
+npm run dev
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/invoiceflow.git
-   cd invoiceflow
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # Root dependencies
-   npm install
-   
-   # Backend dependencies
-   cd backend
-   npm install
-   
-   # Frontend dependencies
-   cd ../frontend
-   npm install
-   ```
-
-3. **Set up environment variables**
-   
-   Backend (`.env`):
-   ```env
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=invoiceflow
-   DB_USER=your_username
-   DB_PASSWORD=your_password
-   PORT=3001
-   NODE_ENV=development
-   JWT_SECRET=your-super-secret-jwt-key
-   JWT_EXPIRES_IN=7d
-   FRONTEND_URL=http://localhost:3000
-   ```
-   
-   Frontend (`.env`):
-   ```env
-   VITE_API_URL=http://localhost:3001/api
-   ```
-
-4. **Set up database**
-   ```bash
-   cd backend
-   npm run db:migrate
-   npm run db:seed
-   ```
-
-5. **Start development servers**
-   ```bash
-   # From root directory
-   npm run dev
-   ```
-   
-   Or separately:
-   ```bash
-   # Terminal 1 - Backend
-   cd backend
-   npm run dev
-   
-   # Terminal 2 - Frontend
-   cd frontend
-   npm run dev
-   ```
-
-6. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:3001
-   - Login with: `demo@invoiceflow.com` / `password123`
+The frontend runs on `http://localhost:3000` and the backend on `http://localhost:3001`.
 
 ## Project Structure
 
 ```
 invoiceflow/
-├── backend/
-│   ├── src/
-│   │   ├── config/        # Database, migrations, seeding
-│   │   ├── controllers/   # Request handlers
-│   │   ├── middleware/    # Auth, error handling
-│   │   ├── models/        # Data models
-│   │   ├── routes/        # API routes
-│   │   ├── types/         # TypeScript types
-│   │   ├── utils/         # Utilities (calculator, auth, status)
-│   │   └── index.ts       # Express app entry point
-│   ├── tests/             # Backend tests
-│   └── package.json
-├── frontend/
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── contexts/      # React contexts (Auth)
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API services
-│   │   ├── types/         # TypeScript types
-│   │   ├── utils/         # Utilities (calculator, PDF)
-│   │   ├── App.tsx        # Main app component
-│   │   └── main.tsx       # Entry point
-│   └── package.json
-├── .github/workflows/     # CI/CD pipelines
-└── README.md
+├── frontend/          # React + TypeScript frontend
+├── backend/          # Node.js + Express API
+└── README.md         # This file
 ```
 
-## Testing
+Pretty straightforward. Frontend and backend are separate, which makes deployment easier and keeps things organized.
 
-### Backend Tests
-```bash
-cd backend
-npm test
-npm run test:coverage
-```
+## What's Next
 
-### Frontend Tests
-```bash
-cd frontend
-npm test
-npm run test:coverage
-```
+I'm always tweaking things. Currently thinking about:
+- Email notifications when invoices are sent
+- Recurring invoice templates
+- Better mobile experience
+- Export functionality for accounting software
 
-### Run All Tests
-```bash
-npm test
-```
+## Tech Stack
 
-## API Endpoints
+- **Frontend:** React 18, TypeScript, Material-UI, React Hook Form, TanStack Query, Recharts, jsPDF
+- **Backend:** Node.js, Express, TypeScript, PostgreSQL, JWT
+- **Testing:** Jest, React Testing Library
+- **Tools:** ESLint, Prettier, Vite
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
+## License
 
-### Clients
-- `GET /api/clients` - Get all clients
-- `GET /api/clients/:id` - Get client by ID
-- `POST /api/clients` - Create client
-- `PUT /api/clients/:id` - Update client
-- `DELETE /api/clients/:id` - Delete client
+MIT - feel free to use this however you want.
 
-### Invoices
-- `GET /api/invoices` - Get all invoices (with filters)
-- `GET /api/invoices/:id` - Get invoice by ID
-- `POST /api/invoices` - Create invoice
-- `PUT /api/invoices/:id` - Update invoice (supports partial updates)
-- `DELETE /api/invoices/:id` - Delete invoice
+---
 
-## Design Philosophy
-
-InvoiceFlow follows a **minimalist, modern design** inspired by YC AI startups:
-- Clean black/white/grey color scheme
-- Inter font family for modern typography
-- Subtle shadows and borders
-- Generous white space
-- Smooth interactions and hover effects
-- Mobile-first responsive design
-
-## Accessibility
-
-- WCAG 2.1 AA compliant
-- ARIA labels on all interactive elements
-- Keyboard navigation support
-- Screen reader announcements
-- Semantic HTML structure
-- Color contrast compliance
-
-## Invoice Status Workflow
-
-```
-Draft → Sent → Viewed → Paid
-  ↓
-Overdue (automatic if past due date)
-```
-
-Status can be updated:
-- Via dropdown in invoice review step
-- Using quick action buttons
-- Automatically (overdue detection)
-
-## Deployment
-
-### Quick Deploy to Vercel (Frontend)
-
-1. **Go to [vercel.com](https://vercel.com)** and sign in with GitHub
-2. **Click "Add New Project"**
-3. **Import your repository**: `suhasramanand/invoiceflow`
-4. **Configure the project**:
-   - **Root Directory**: `frontend`
-   - **Framework Preset**: Vite (auto-detected)
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-   - **Install Command**: `npm install`
-5. **Add Environment Variable**:
-   - Key: `VITE_API_URL`
-   - Value: `https://your-backend-url.com/api` (update after backend deployment)
-6. **Click "Deploy"**
-
-Your frontend will be live at `https://your-project.vercel.app`
-
-### Backend Deployment
-
-The backend needs to be deployed separately. Recommended platforms:
-
-- **Railway** (Recommended - Easy PostgreSQL setup)
-- **Render** (Free tier available)
-- **Heroku** (Classic platform)
-- **AWS EC2** (More control)
-- **DigitalOcean** (App Platform)
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions for both frontend and backend.
-
+Built with React, TypeScript, and a lot of coffee.
